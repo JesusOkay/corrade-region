@@ -1,11 +1,5 @@
 <?php
-// La URL de la página de la que queremos obtener el contenido
-$url = 'http://api.gridsurvey.com/simquery.php?region=FETCH_RANDOM_ONLINE_REGION_FROM_DATABASE';
-
-// Usamos file_get_contents para obtener el contenido de la página
-$response = file_get_contents($url);
-
-// La lista de UUIDs que queremos mostrar
+// La lista de UUIDs que queremos usar en el request
 $uuids = [
     "0815079d-5085-43d0-8035-ae09bfa4303a",
     "5d9b4e09-62eb-4467-ad06-4de73eb419fe",
@@ -55,25 +49,46 @@ $uuids = [
     "f310494f-7f1c-42fa-a742-8b728f579c49"
 ];
 
-// Comprobamos si la respuesta se obtuvo correctamente
-if ($response === FALSE) {
-    echo 'Hubo un error al obtener el contenido de la página.';
-} else {
-    // Imprimimos el contenido dentro de la estructura HTML
-    echo '<html>';
-    echo '<head>';
-    echo '<title>Contenido Extraído</title>';
-    echo '</head>';
-    echo '<body>';
+// Función para hacer el request y obtener la región para cada UUID
+function getRegion($uuid) {
+    // URL con el UUID como parámetro
+    $url = 'http://api.gridsurvey.com/simquery.php?region=' . urlencode($uuid);
     
-    // Imprimir UUIDs en la primera línea
-    echo '<p>' . implode('<br>', $uuids) . '</p>';
+    // Obtener el contenido de la página
+    $response = file_get_contents($url);
     
-    // Imprimir la región en la segunda línea
-    echo '<p>' . $response . '</p>';
+    // Verificar si la respuesta es válida
+    if ($response === FALSE) {
+        return "Error al obtener la región para el UUID: $uuid";
+    }
     
-    echo '</body>';
-    echo '</html>';
+    return $response;
 }
+
+// Imprimir la respuesta en el body
+echo '<html>';
+echo '<head>';
+echo '<title>Resultados de Regiones por UUID</title>';
+echo '</head>';
+echo '<body>';
+
+foreach ($uuids as $uuid) {
+    // Mostrar el UUID
+    echo '<h3>UUID:</h3>';
+    echo '<p>' . $uuid . '</p>';
+    
+    // Obtener la región para el UUID
+    $region = getRegion($uuid);
+    
+    // Mostrar la región
+    echo '<h3>Región:</h3>';
+    echo '<p>' . $region . '</p>';
+    
+    // Agregar un separador entre los UUIDs
+    echo '<hr>';
+}
+
+echo '</body>';
+echo '</html>';
 ?>
 
