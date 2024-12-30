@@ -1,7 +1,11 @@
 <?php
+// La URL de la página de la que queremos obtener el contenido
 $url = 'http://api.gridsurvey.com/simquery.php?region=FETCH_RANDOM_ONLINE_REGION_FROM_DATABASE';
+
+// Usamos file_get_contents para obtener el contenido de la página
 $response = file_get_contents($url);
 
+// La lista de UUIDs
 $uuids = [
     "0815079d-5085-43d0-8035-ae09bfa4303a",
     "5d9b4e09-62eb-4467-ad06-4de73eb419fe",
@@ -51,14 +55,21 @@ $uuids = [
     "f310494f-7f1c-42fa-a742-8b728f579c49"
 ];
 
+// Comprobamos si la respuesta se obtuvo correctamente
 if ($response === FALSE) {
-    echo 'Error al obtener el contenido.';
+    echo 'Hubo un error al obtener el contenido de la página.';
 } else {
-    echo '<h3>Región:</h3>';
-    echo $response;
-    echo '<h3>UUIDs:</h3>';
-    foreach ($uuids as $index => $uuid) {
-        echo ($index + 1) . '. ' . $uuid . '<br>';
-    }
+    // Seleccionar una UUID aleatoria
+    $random_uuid = $uuids[array_rand($uuids)];
+
+    // Imprimir la página con la UUID y la región
+    echo '<html>';
+    echo '<head>';
+    echo '</head>';
+    echo '<body>';
+    echo '<p>' . $random_uuid . '</p>';
+    echo '<p>' . $response . '</p>';
+    echo '</body>';
+    echo '</html>';
 }
 ?>
