@@ -62,13 +62,9 @@ if ($response === FALSE) {
     // Seleccionar una UUID aleatoria
     $random_uuid = $uuids[array_rand($uuids)];
 
-    // Imprimir la página con la UUID y la región
-    echo '<body>';
-    echo '<html>';
-    echo . $random_uuid .;
-    echo . $response .;
-    echo '</body>';
-    echo '</html>';
-
+    // Imprimir UUID y la respuesta de la región
+    echo "UUID: " . $random_uuid . "\n";
+    echo "Región: " . $response . "\n";
 }
 ?>
+
