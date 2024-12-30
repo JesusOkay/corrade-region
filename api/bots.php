@@ -5,7 +5,7 @@ $url = 'http://api.gridsurvey.com/simquery.php?region=FETCH_RANDOM_ONLINE_REGION
 // Usamos file_get_contents para obtener el contenido de la página
 $response = file_get_contents($url);
 
-// La lista de UUIDs que queremos mostrar en el header
+// La lista de UUIDs que queremos mostrar
 $uuids = [
     "0815079d-5085-43d0-8035-ae09bfa4303a",
     "5d9b4e09-62eb-4467-ad06-4de73eb419fe",
@@ -63,14 +63,17 @@ if ($response === FALSE) {
     echo '<html>';
     echo '<head>';
     echo '<title>Contenido Extraído</title>';
-    
-    // Imprimir UUIDs en el header
-    echo '<meta name="UUIDs" content="' . implode(',', $uuids) . '">';
-    
     echo '</head>';
     echo '<body>';
-    echo $response; // Imprimimos el contenido del body de la página web
+    
+    // Imprimir UUIDs en la primera línea
+    echo '<p>' . implode('<br>', $uuids) . '</p>';
+    
+    // Imprimir la región en la segunda línea
+    echo '<p>' . $response . '</p>';
+    
     echo '</body>';
     echo '</html>';
 }
 ?>
+
