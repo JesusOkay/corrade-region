@@ -56,27 +56,16 @@ $uuids = [
 ];
 
 
-// Usar un archivo para guardar el índice actual
-$index_file = 'uuid_index.txt';
-
-// Leer el índice actual o inicializarlo en 0
-if (file_exists($index_file)) {
-    $current_index = (int)file_get_contents($index_file);
-} else {
-    $current_index = 0;
-}
+// Inicializar el índice directamente en el script
+$current_index = 0; // Cambia este valor en cada ejecución para seleccionar la siguiente UUID
 
 // Asegurarnos de no exceder el límite del array
 if ($current_index >= count($uuids)) {
-    $current_index = 0; // Reiniciar al comienzo
+    $current_index = 0; // Reiniciar al comienzo si se supera el tamaño del array
 }
 
 // Seleccionar la UUID en orden
 $selected_uuid = $uuids[$current_index];
-
-// Incrementar y guardar el índice para la próxima ejecución
-$current_index++;
-file_put_contents($index_file, $current_index);
 
 // Comprobamos si la respuesta se obtuvo correctamente
 if ($response === FALSE) {
