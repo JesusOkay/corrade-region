@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Obtener Cadenas</title>
+</head>
+<body>
+    <h1>Cadena actual:</h1>
+    <p id="currentString">Cargando...</p>
+
+    <button id="refreshButton">Actualizar Cadena</button>
+
+    <script>
+        // Función para obtener la cadena desde el PHP
+        function fetchString() {
+            fetch('api/bots.php')
+                .then(response => response.json())
+                .then(data => {
+                    // Mostrar la cadena en el HTML
+                    document.getElementById('currentString').textContent = data.current;
+                })
+                .catch(error => {
+                    console.error('Error al obtener la cadena:', error);
+                    document.getElementById('currentString').textContent = 'Error al obtener la cadena.';
+                });
+        }
+
+        // Cargar la cadena al inicio
+        window.onload = fetchString;
+
+        // Actualizar la cadena al hacer clic en el botón
+        document.getElementById('refreshButton').addEventListener('click', fetchString);
+    </script>
+</body>
+</html>
