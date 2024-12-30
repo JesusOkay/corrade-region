@@ -1,5 +1,11 @@
 <?php
-// La lista de UUIDs que queremos usar en el request
+// La URL de la página de la que queremos obtener el contenido
+$url = 'http://api.gridsurvey.com/simquery.php?region=FETCH_RANDOM_ONLINE_REGION_FROM_DATABASE';
+
+// Usamos file_get_contents para obtener el contenido de la página
+$response = file_get_contents($url);
+
+// La lista de UUIDs
 $uuids = [
     "0815079d-5085-43d0-8035-ae09bfa4303a",
     "5d9b4e09-62eb-4467-ad06-4de73eb419fe",
@@ -49,46 +55,38 @@ $uuids = [
     "f310494f-7f1c-42fa-a742-8b728f579c49"
 ];
 
-// Función para hacer el request y obtener la región para cada UUID
-function getRegion($uuid) {
-    // URL con el UUID como parámetro
-    $url = 'http://api.gridsurvey.com/simquery.php?region=' . urlencode($uuid);
-    
-    // Obtener el contenido de la página
-    $response = file_get_contents($url);
-    
-    // Verificar si la respuesta es válida
-    if ($response === FALSE) {
-        return "Error al obtener la región para el UUID: $uuid";
+// Verificamos si la respuesta de la API se ha obtenido correctamente
+if ($response === FALSE) {
+    echo 'Hubo un error al obtener el contenido de la página.';
+} else {
+    // Obtener el índice de la región actual de la URL
+    $region_data = json_decode($response, true);
+
+    if (is_array($region_data) && count($region_data) > 0) {
+        // Iteramos sobre los UUIDs y las regiones en orden
+        for ($i = 0; $i < count($uuids); $i++) {
+            // Asegurarnos de que no excedemos el tamaño de la región obtenida
+            if (isset($region_data[$i])) {
+                echo '<html>';
+                echo '<head>';
+                echo '<title>Contenido Extraído</title>';
+                echo '</head>';
+                echo '<body>';
+
+                // Mostrar UUID y Región en orden
+                echo '<h3>UUID:</h3>';
+                echo '<p>' . $uuids[$i] . '</p>';
+
+                echo '<h3>Región:</h3>';
+                echo '<p>' . $region_data[$i] . '</p>';
+
+                echo '</body>';
+                echo '</html>';
+            } else {
+                echo 'No se pudieron obtener suficientes regiones desde la API.';
+                break;
+            }
+        }
     }
-    
-    return $response;
 }
-
-// Imprimir la respuesta en el body
-echo '<html>';
-echo '<head>';
-echo '<title>Resultados de Regiones por UUID</title>';
-echo '</head>';
-echo '<body>';
-
-foreach ($uuids as $uuid) {
-    // Mostrar el UUID
-    echo '<h3>UUID:</h3>';
-    echo '<p>' . $uuid . '</p>';
-    
-    // Obtener la región para el UUID
-    $region = getRegion($uuid);
-    
-    // Mostrar la región
-    echo '<h3>Región:</h3>';
-    echo '<p>' . $region . '</p>';
-    
-    // Agregar un separador entre los UUIDs
-    echo '<hr>';
-}
-
-echo '</body>';
-echo '</html>';
 ?>
-
