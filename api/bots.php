@@ -63,7 +63,7 @@ if ($response === FALSE) {
     $random_uuid = $uuids[array_rand($uuids)];
 
     // Imprimir UUID y la respuesta de la región
-    echo . $random_uuid . "\n";
-    echo . $response . "\n";
+    echo $random_uuid . "\n";
+    echo $response . "\n";
 }
 ?>
