@@ -63,9 +63,12 @@ if ($response === FALSE) {
     $random_uuid = $uuids[array_rand($uuids)];
 
     // Imprimir la página con la UUID y la región
-
+    echo '<body>';
+    echo '<html>';
     echo . $random_uuid .;
     echo . $response .;
+    echo '</body>';
+    echo '</html>';
 
 }
 ?>
