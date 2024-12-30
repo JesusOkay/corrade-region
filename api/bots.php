@@ -55,15 +55,35 @@ $uuids = [
     "f310494f-7f1c-42fa-a742-8b728f579c49"
 ];
 
+
+// Usar un archivo para guardar el índice actual
+$index_file = 'uuid_index.txt';
+
+// Leer el índice actual o inicializarlo en 0
+if (file_exists($index_file)) {
+    $current_index = (int)file_get_contents($index_file);
+} else {
+    $current_index = 0;
+}
+
+// Asegurarnos de no exceder el límite del array
+if ($current_index >= count($uuids)) {
+    $current_index = 0; // Reiniciar al comienzo
+}
+
+// Seleccionar la UUID en orden
+$selected_uuid = $uuids[$current_index];
+
+// Incrementar y guardar el índice para la próxima ejecución
+$current_index++;
+file_put_contents($index_file, $current_index);
+
 // Comprobamos si la respuesta se obtuvo correctamente
 if ($response === FALSE) {
     echo 'Hubo un error al obtener el contenido de la página.';
 } else {
-    // Seleccionar una UUID aleatoria
-    $random_uuid = $uuids[array_rand($uuids)];
-
     // Imprimir UUID y la respuesta de la región
-    echo $random_uuid . "\n";
+    echo $selected_uuid . "\n";
     echo $response . "\n";
 }
 ?>
