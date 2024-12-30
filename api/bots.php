@@ -55,38 +55,28 @@ $uuids = [
     "f310494f-7f1c-42fa-a742-8b728f579c49"
 ];
 
-// Verificamos si la respuesta de la API se ha obtenido correctamente
+// Comprobamos si la respuesta se obtuvo correctamente
 if ($response === FALSE) {
     echo 'Hubo un error al obtener el contenido de la página.';
 } else {
-    // Obtener el índice de la región actual de la URL
-    $region_data = json_decode($response, true);
+    // Seleccionar una UUID aleatoria
+    $random_uuid = $uuids[array_rand($uuids)];
 
-    if (is_array($region_data) && count($region_data) > 0) {
-        // Iteramos sobre los UUIDs y las regiones en orden
-        for ($i = 0; $i < count($uuids); $i++) {
-            // Asegurarnos de que no excedemos el tamaño de la región obtenida
-            if (isset($region_data[$i])) {
-                echo '<html>';
-                echo '<head>';
-                echo '<title>Contenido Extraído</title>';
-                echo '</head>';
-                echo '<body>';
-
-                // Mostrar UUID y Región en orden
-                echo '<h3>UUID:</h3>';
-                echo '<p>' . $uuids[$i] . '</p>';
-
-                echo '<h3>Región:</h3>';
-                echo '<p>' . $region_data[$i] . '</p>';
-
-                echo '</body>';
-                echo '</html>';
-            } else {
-                echo 'No se pudieron obtener suficientes regiones desde la API.';
-                break;
-            }
-        }
-    }
+    // Imprimir la página con la UUID y la región
+    echo '<html>';
+    echo '<head>';
+    echo '<title>Contenido Extraído</title>';
+    echo '</head>';
+    echo '<body>';
+    
+    // Mostrar UUID y Región
+    echo '<h3>UUID:</h3>';
+    echo '<p>' . $random_uuid . '</p>';
+    
+    echo '<h3>Región:</h3>';
+    echo '<p>' . $response . '</p>';
+    
+    echo '</body>';
+    echo '</html>';
 }
 ?>
