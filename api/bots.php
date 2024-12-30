@@ -59,11 +59,11 @@ $uuids = [
 if ($response === FALSE) {
     echo 'Hubo un error al obtener el contenido de la página.';
 } else {
-    // Recorremos la lista de UUIDs en orden
-    foreach ($uuids as $uuid) {
-        // Imprimir UUID y la respuesta de la región
-        echo . $uuid . "\n";
-        echo . $response . "\n";
-    }
+    // Seleccionar una UUID aleatoria
+    $random_uuid = $uuids[array_rand($uuids)];
+
+    // Imprimir UUID y la respuesta de la región
+    echo "UUID: " . $random_uuid . "\n";
+    echo "Región: " . $response . "\n";
 }
 ?>
