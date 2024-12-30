@@ -69,7 +69,6 @@ if ($response === FALSE) {
     
     echo '</head>';
     echo '<body>';
-    echo '<h2>Regiones</h2>';
     echo $response; // Imprimimos el contenido del body de la página web
     echo '</body>';
     echo '</html>';
