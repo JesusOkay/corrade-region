@@ -61,8 +61,11 @@ if (file_exists($index_file)) {
     $index = 0;
 }
 
-// Mostrar el valor de la lista
-echo $list[$index];
+// Obtener la región desde el enlace de la API
+$region_url = "http://api.gridsurvey.com/simquery.php?region=FETCH_RANDOM_ONLINE_REGION_FROM_DATABASE";
+$region_json = file_get_contents($region_url);
+$region_data = json_decode($region_json, true);
+$region = $region_data['region'] ?? 'No data available';
 
 // Actualizar el índice para la siguiente ejecución
 $next_index = $index + 1;
@@ -73,3 +76,21 @@ if ($next_index >= count($list)) {
 // Guardar el índice actualizado
 file_put_contents($index_file, $next_index);
 ?>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista y Región</title>
+    <script>
+        // Mostrar la lista en el head
+        const list = <?php echo json_encode($list); ?>;
+        console.log("Lista:", list);
+    </script>
+</head>
+<body>
+    <h1>Región: <?php echo htmlspecialchars($region); ?></h1>
+</body>
+</html>
+
