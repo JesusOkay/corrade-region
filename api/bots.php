@@ -1,8 +1,8 @@
-<?php
+<?php 
 // La URL de la página de la que queremos obtener el contenido
 $url = 'http://api.gridsurvey.com/simquery.php?region=FETCH_RANDOM_ONLINE_REGION_FROM_DATABASE';
 
-// Usamos file_get_contents para obtener el contenido de la página
+// Obtenemos el contenido de la página
 $response = file_get_contents($url);
 
 // La lista de UUIDs
@@ -55,15 +55,31 @@ $uuids = [
     "f310494f-7f1c-42fa-a742-8b728f579c49"
 ];
 
-// Comprobamos si la respuesta se obtuvo correctamente
+// Definimos el archivo que almacenará el contador
+$counterFile = 'counter.txt';
+
+// Verificamos si el archivo existe para obtener el contador actual
+if (file_exists($counterFile)) {
+    $counter = (int) file_get_contents($counterFile);
+} else {
+    $counter = 0;
+}
+
+// Seleccionamos la UUID en función del contador (resetea al llegar al final)
+$current_index = $counter % count($uuids);
+$selected_uuid = $uuids[$current_index];
+
+// Incrementamos el contador para la próxima ejecución y lo guardamos
+$counter++;
+file_put_contents($counterFile, $counter);
+
+// Comprobamos si se obtuvo correctamente la respuesta de la URL
 if ($response === FALSE) {
     echo 'Hubo un error al obtener el contenido de la página.';
 } else {
-    // Seleccionar una UUID aleatoria
-    $random_uuid = $uuids[array_rand($uuids)];
-
-    // Imprimir UUID y la respuesta de la región
-    echo $random_uuid . "\n";
+    // Imprimimos la UUID seleccionada y la respuesta de la región
+    echo $selected_uuid . "\n";
     echo $response . "\n";
 }
 ?>
+
