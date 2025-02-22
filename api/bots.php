@@ -55,31 +55,30 @@ $uuids = [
     "f310494f-7f1c-42fa-a742-8b728f579c49"
 ];
 
-// Definimos el archivo que almacenará el contador
-$counterFile = 'counter.txt';
+// Si APCu está disponible, usamos su caché para mantener el contador
+if (function_exists('apcu_fetch')) {
+    $counter = apcu_fetch('counter');
+    if ($counter === false) {
+        $counter = 0;
+    }
+    // Seleccionamos la UUID de forma secuencial
+    $current_index = $counter % count($uuids);
+    $selected_uuid = $uuids[$current_index];
 
-// Verificamos si el archivo existe para obtener el contador actual
-if (file_exists($counterFile)) {
-    $counter = (int) file_get_contents($counterFile);
+    // Incrementamos el contador y lo almacenamos nuevamente
+    $counter++;
+    apcu_store('counter', $counter);
 } else {
-    $counter = 0;
+    // Si APCu no está disponible, se selecciona una UUID aleatoria
+    $selected_uuid = $uuids[array_rand($uuids)];
 }
 
-// Seleccionamos la UUID en función del contador (resetea al llegar al final)
-$current_index = $counter % count($uuids);
-$selected_uuid = $uuids[$current_index];
-
-// Incrementamos el contador para la próxima ejecución y lo guardamos
-$counter++;
-file_put_contents($counterFile, $counter);
-
-// Comprobamos si se obtuvo correctamente la respuesta de la URL
+// Verificamos si se obtuvo correctamente la respuesta
 if ($response === FALSE) {
     echo 'Hubo un error al obtener el contenido de la página.';
 } else {
-    // Imprimimos la UUID seleccionada y la respuesta de la región
+    // Imprimimos la UUID seleccionada y la respuesta
     echo $selected_uuid . "\n";
     echo $response . "\n";
 }
 ?>
-
