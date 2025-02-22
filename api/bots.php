@@ -1,11 +1,11 @@
 <?php 
-// La URL de la página de la que queremos obtener el contenido
+// URL de la API a consultar
 $url = 'http://api.gridsurvey.com/simquery.php?region=FETCH_RANDOM_ONLINE_REGION_FROM_DATABASE';
 
-// Obtenemos el contenido de la página
+// Obtenemos la respuesta de la API
 $response = file_get_contents($url);
 
-// La lista de UUIDs
+// Lista completa de UUIDs
 $uuids = [
     "0815079d-5085-43d0-8035-ae09bfa4303a",
     "5d9b4e09-62eb-4467-ad06-4de73eb419fe",
@@ -55,17 +55,17 @@ $uuids = [
     "f310494f-7f1c-42fa-a742-8b728f579c49"
 ];
 
-// Definimos el archivo que almacenará el contador
-$counterFile = 'counter.txt';
+// Definimos el archivo para almacenar el contador en el directorio temporal (escribible en Vercel)
+$counterFile = '/tmp/counter.txt';
 
-// Verificamos si el archivo existe para obtener el contador actual
+// Obtenemos el valor actual del contador, o lo inicializamos en 0 si no existe
 if (file_exists($counterFile)) {
     $counter = (int) file_get_contents($counterFile);
 } else {
     $counter = 0;
 }
 
-// Seleccionamos la UUID en función del contador (resetea al llegar al final)
+// Seleccionamos la UUID en función del contador (se resetea al llegar al final de la lista)
 $current_index = $counter % count($uuids);
 $selected_uuid = $uuids[$current_index];
 
@@ -73,11 +73,11 @@ $selected_uuid = $uuids[$current_index];
 $counter++;
 file_put_contents($counterFile, $counter);
 
-// Comprobamos si se obtuvo correctamente la respuesta de la URL
+// Comprobamos si se obtuvo correctamente la respuesta de la API
 if ($response === FALSE) {
     echo 'Hubo un error al obtener el contenido de la página.';
 } else {
-    // Imprimimos la UUID seleccionada y la respuesta de la región
+    // Imprimimos la UUID seleccionada y la respuesta obtenida
     echo $selected_uuid . "\n";
     echo $response . "\n";
 }
